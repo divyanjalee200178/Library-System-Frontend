@@ -17,7 +17,7 @@ const navItems = [
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { label: "Users", href: "/users", icon: Users },
     { label: "Books", href: "/books", icon: BookOpen },
-    // { label: "Lendings", href: "/lendings", icon: GraduationCap },
+    { label: "Lendings", href: "/lendings", icon: GraduationCap },
 ];
 
 export function Sidebar() {
@@ -45,8 +45,8 @@ export function Sidebar() {
                 <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-700">
                     <div className="flex h-9 w-9 items-center justify-center rounded-lg overflow-hidden">
                         <Image
-                            src="/library-logo.jpg"
-                            alt="Library Logo"
+                            src="/library-logos.jpg"
+                            alt="Library Logos"
                             width={36}
                             height={36}
                             className="object-cover border-amber-300 border"
@@ -85,7 +85,7 @@ export function Sidebar() {
                 <div className="px-6 py-4 border-t border-slate-700">
                     <p className="text-xs text-slate-600">Capstone Project</p>
                     <p className="text-xs text-slate-500">Library Management</p>
-                    <p className="text-xs text-slate-600 mt-1">ECA, HDSE @ IJSE</p>
+                    <p className="text-xs text-slate-600 mt-1"></p>
                 </div>
             </aside>
         </>

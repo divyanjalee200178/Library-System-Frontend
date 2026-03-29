@@ -130,27 +130,28 @@ export interface BookSummary {
     picture?: string;
 }
 
-export interface Lending {
-    lendingId: string;
-    borrowedDate: string;
-    dueDate: string;
-    returnDate?: string;
-    status: string;
-    readerId: string;
-    bookId: string;
-    reader?: ReaderSummary;
-    book?: BookSummary;
-}
-
-export interface LendingFormData {
-    lendingId: string;
-    borrowedDate: string;
-    dueDate: string;
-    returnDate?: string;
-    status: string;
-    readerId: string;
-    bookId: string;
-}
+//LENDING *************************************************
+// export interface Lending {
+//     lendingId: string;
+//     readerId: string;
+//     readerName?: string;
+//     bookId: string;
+//     bookTitle?: string;
+//     borrowedDate: string; // ISO string
+//     dueDate: string;      // ISO string
+//     returnDate?: string;  // ISO string
+//     status: "borrowed" | "returned" | "overdue";
+// }
+//
+// export interface LendingFormData {
+//     lendingId?: string;
+//     readerId: string;
+//     bookId: string;
+//     borrowedDate: string;
+//     dueDate: string;
+//     returnDate?: string;
+//     status: "borrowed" | "returned" | "overdue";
+// }
 
 export interface ApiError {
     message: string;

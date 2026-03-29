@@ -1,153 +1,16 @@
-// // src/lib/api.ts
-// import axios from "axios";
-// import {
-//     Book,
-//     BookFormData,
-//     Reader,
-//     ReaderFormData,
-//     Lending,
-//     LendingFormData,
-// } from "@/types/index";
-//
-// const API_BASE = "http://localhost:8082/api/v1";
-//
-// const api = axios.create({
-//     baseURL: API_BASE,
-//     withCredentials: true
-// });
-//
-// // Books
-// export const getBooks = async (): Promise<Book[]> => {
-//     const res = await api.get("/books");
-//     return res.data;
-// };
-//
-// export const createBook = async (data: BookFormData): Promise<Book> => {
-//     const form = new FormData();
-//     form.append("bookId", data.bookId);
-//     form.append("title", data.title);
-//     form.append("author", data.author);
-//     form.append("publisher", data.publisher);
-//     form.append("year", String(data.year));
-//     form.append("isbn", data.isbn);
-//     if (data.picture) form.append("picture", data.picture);
-//
-//     const res = await api.post("/books", form, {
-//         headers: { "Content-Type": "multipart/form-data" },
-//     });
-//     return res.data;
-// };
-//
-// export const updateBook = async (bookId: string, data: BookFormData): Promise<Book> => {
-//     const form = new FormData();
-//     form.append("title", data.title);
-//     form.append("author", data.author);
-//     form.append("publisher", data.publisher);
-//     form.append("year", String(data.year));
-//     form.append("isbn", data.isbn);
-//     if (data.picture) form.append("picture", data.picture);
-//
-//     const res = await api.put(`/books/${bookId}`, form, {
-//         headers: { "Content-Type": "multipart/form-data" },
-//     });
-//     return res.data;
-// };
-//
-// export const deleteBook = async (bookId: string): Promise<void> => {
-//     await api.delete(`/api/v1/books/${bookId}`);
-// };
-//
-// // ────────────────────────────────
-// // READER API
-// // ────────────────────────────────
-// export const getReaders = async (): Promise<Reader[]> => {
-//     const res = await api.get("/api/v1/readers");
-//     return res.data;
-// };
-//
-// export const getReader = async (readerId: string): Promise<Reader> => {
-//     const res = await api.get(`/api/v1/readers/${readerId}`);
-//     return res.data;
-// };
-//
-// export const createReader = async (data: ReaderFormData): Promise<Reader> => {
-//     const form = new FormData();
-//     form.append("readerId", data.readerId);
-//     form.append("name", data.name);
-//     form.append("address", data.address);
-//     form.append("mobile", data.mobile);
-//     form.append("membershipType", data.membershipType);
-//     if (data.email) form.append("email", data.email);
-//     if (data.picture) form.append("picture", data.picture);
-//
-//     const res = await api.post("/api/v1/readers", form, {
-//         headers: { "Content-Type": "multipart/form-data" },
-//     });
-//     return res.data;
-// };
-//
-// export const updateReader = async (readerId: string, data: ReaderFormData): Promise<Reader> => {
-//     const form = new FormData();
-//     form.append("name", data.name);
-//     form.append("address", data.address);
-//     form.append("mobile", data.mobile);
-//     form.append("membershipType", data.membershipType);
-//     if (data.email) form.append("email", data.email);
-//     if (data.picture) form.append("picture", data.picture);
-//
-//     const res = await api.put(`/api/v1/readers/${readerId}`, form, {
-//         headers: { "Content-Type": "multipart/form-data" },
-//     });
-//     return res.data;
-// };
-//
-// export const deleteReader = async (readerId: string): Promise<void> => {
-//     await api.delete(`/api/v1/readers/${readerId}`);
-// };
-//
-// export const getReaderPictureUrl = (fileName: string): string =>
-//     `${API_BASE}/uploads/${fileName}`;
-//
-// // ────────────────────────────────
-// // LENDING API (JSON)
-// // ────────────────────────────────
-// export const getLendings = async (): Promise<Lending[]> => {
-//     const res = await api.get("/api/v1/lendings");
-//     return res.data;
-// };
-//
-// export const getLending = async (lendingId: string): Promise<Lending> => {
-//     const res = await api.get(`/api/v1/lendings/${lendingId}`);
-//     return res.data;
-// };
-//
-// export const createLending = async (data: LendingFormData): Promise<Lending> => {
-//     const res = await api.post("/api/v1/lendings", data);
-//     return res.data;
-// };
-//
-// export const updateLending = async (lendingId: string, data: LendingFormData): Promise<Lending> => {
-//     const res = await api.put(`/api/v1/lendings/${lendingId}`, data);
-//     return res.data;
-// };
-//
-// export const deleteLending = async (lendingId: string): Promise<void> => {
-//     await api.delete(`/api/v1/lendings/${lendingId}`);
-// };
 
-// src/lib/api.ts
 import axios, { AxiosResponse } from "axios";
 import {
     Book,
     BookFormData,
     User,
     UserFormData,
-    Lending,
-    LendingFormData,
 } from "@/types/index";
+import {Lending, LendingFormData} from "@/types/lending";
 
 const API_BASE = "http://localhost:8082/api/v1";
 const USER_API_BASE = "http://localhost:8081/api/v1/users";
+const LENDING_API_BASE = "http://localhost:8083/api/v1";
 
 const api = axios.create({
     baseURL: API_BASE,
@@ -239,26 +102,45 @@ export const getReaderPictureUrl = (fileName: string): string =>
 // ────────────────────────────────
 // LENDING API (JSON)
 // ────────────────────────────────
-export const getLendings = async (): Promise<Lending[]> => {
-    const res: AxiosResponse<Lending[]> = await api.get("/lendings");
+
+export interface Reader {
+    readerId: string;
+    name: string;
+}
+
+export const getReaders = async (): Promise<Reader[]> => {
+    const res = await axios.get(`${LENDING_API_BASE}/lendings/readers`);
     return res.data;
 };
 
-export const getLending = async (lendingId: string): Promise<Lending> => {
-    const res: AxiosResponse<Lending> = await api.get(`/lendings/${lendingId}`);
+export interface Book {
+    bookId: string;
+    title: string;
+
+}
+
+// Get all books
+export const getBookCombo = async (): Promise<Book[]> => {
+    const res = await axios.get(`${LENDING_API_BASE}/lendings/books`);
+    return res.data;
+};
+
+
+export const getLendings = async (): Promise<Lending[]> => {
+    const res = await axios.get(`${LENDING_API_BASE}/lendings`);
     return res.data;
 };
 
 export const createLending = async (data: LendingFormData): Promise<Lending> => {
-    const res: AxiosResponse<Lending> = await api.post("/lendings", data);
+    const res = await axios.post(`${LENDING_API_BASE}/lendings`, data);
     return res.data;
 };
 
-export const updateLending = async (lendingId: string, data: LendingFormData): Promise<Lending> => {
-    const res: AxiosResponse<Lending> = await api.put(`/lendings/${lendingId}`, data);
+export const updateLending = async (id: string, data: LendingFormData): Promise<Lending> => {
+    const res = await axios.put(`${LENDING_API_BASE}/lendings/${id}`, data);
     return res.data;
 };
 
-export const deleteLending = async (lendingId: string): Promise<void> => {
-    await api.delete(`/lendings/${lendingId}`);
+export const deleteLending = async (id: string): Promise<void> => {
+    await axios.delete(`${LENDING_API_BASE}/lendings/${id}`);
 };
